@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+profile.json
+profiles/
+exports/
+.env
+.DS_Store
