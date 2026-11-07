@@ -2,6 +2,14 @@
 
 A personal astrology agent skill for private, reflective conversations. Computes natal data, general sky events, transit windows, secondary progressions and natal SVG charts. Astrology is symbolic reflection, not a scientific personality test or a guarantee of future events.
 
+## Install the skill
+
+- **skills.sh / GitHub:** [`astron` on skills.sh](https://skills.sh/wauputr4/astron/astron)
+  ```sh
+  npx skills add wauputr4/astron --skill astron
+  ```
+- **ClawHub:** [Astron by @wauputr4](https://clawhub.ai/wauputr4/skills/astron), version 1.0.0. The listing is public, but its registry license label conflicts with this repository's license; see the license note below before relying on that distribution.
+
 ## Setup
 
 Requires Python 3.12+ and local ephemeris support. Install in an isolated environment:
@@ -21,3 +29,5 @@ Charts use tropical geocentric positions and Placidus houses. If time is unknown
 ## License
 
 AGPL-3.0-only. Kerykeion and pyswisseph have their own license terms; consult their upstream licenses before distribution or public deployment.
+
+**ClawHub license discrepancy:** ClawHub labels published skills MIT-0 by platform policy, while this repository and its bundled LICENSE state AGPL-3.0-only. The licensing implications of the ClawHub copy have not been resolved. Use the GitHub source and review applicable terms rather than assuming the registry label changes this repository's license.
