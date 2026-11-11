@@ -75,10 +75,9 @@ Official references:
 - [Discovery layouts and required frontmatter](https://github.com/vercel-labs/skills/blob/main/docs/creating-skills.md)
 - [Telemetry configuration](https://github.com/vercel-labs/skills/blob/main/docs/troubleshooting.md#telemetry)
 
-## License caution
+## License boundary
 
-The GitHub repository is AGPL-3.0-only. Its ClawHub listing has an unresolved MIT-0 platform-label discrepancy; see the [README license note](../README.md#license). Directory availability does not resolve licensing terms.
-
+The full GitHub engine and workflows remain AGPL-3.0-only. The isolated [ClawHub instruction package](../distribution/clawhub/README.md) is MIT-0 and does not bundle the engine or dependencies. Earlier publication notes below are historical; the new split supersedes the publication hold, not earlier-version licensing questions.
 
 ## Registry publication and source links
 
@@ -86,13 +85,7 @@ The source repository and contribution entry point are <https://github.com/waupu
 
 Rechecked the official [skills.sh FAQ](https://skills.sh/docs/faq) and [documentation](https://skills.sh/docs) on 2026-11-11: listing/ranking uses installation telemetry. No additional registration manifest is documented for a public GitHub repository with a discoverable root `SKILL.md`. A source link or `--list` inspection does not create an installation. Do not manufacture installs, promise immediate indexing, or treat a rendered 404 with HTTP 200 as a working listing.
 
-ClawHub's [skill-format license policy](https://github.com/openclaw/clawhub/blob/main/docs/skill-format.md#license) requires MIT-0 for every published skill and explicitly disallows conflicting terms or per-skill overrides. Astron's repository remains AGPL-3.0-only; no license change or new ClawHub publication is authorized by merely adding source links. Resolve rights and licensing before republishing; keep upstream dependency obligations intact.
-
-
-## Current distribution decision
-
-Keep AGPL-3.0-only and GitHub as the canonical distribution path. The existing ClawHub v1.0.0 listing is legacy; do not republish the AGPL bundle under MIT-0 or imply that it contains the latest GitHub functionality. No separate MIT-0 package is planned by this change. The README uses the documented official skills.sh repository badge and a plain, explicitly labeled legacy ClawHub listing link. The previous custom Shields.io ClawHub badge was not official and has been removed. A badge alone is not evidence of indexing, compatibility, or desktop verification.
-
+ClawHub requires MIT-0 for published contents. Publish only the staged two-file MIT-0 package described above, never the AGPL repository root. A GitHub push alone does not update the registry. The old v1.0.0 license-label discrepancy is not retroactively resolved by the new package.
 
 ## Actual installation and live pages verified: 2026-11-11
 

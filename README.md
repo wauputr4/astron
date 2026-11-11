@@ -1,7 +1,7 @@
 # Astron
 
 [![skills.sh](https://www.skills.sh/b/wauputr4/astron)](https://skills.sh/wauputr4/astron)
-[ClawHub — legacy v1.0.0](https://clawhub.ai/wauputr4/skills/astron)
+[ClawHub — MIT-0 instructions](https://clawhub.ai/wauputr4/skills/astron)
 
 [GitHub repository](https://github.com/wauputr4/astron) · [Report an issue](https://github.com/wauputr4/astron/issues) · [Contribute](#contributing)
 
@@ -37,9 +37,7 @@ npx skills add wauputr4/astron --skill astron --list
 
 **Verified availability (2026-11-11):** a real, project-scoped skills CLI installation from GitHub succeeded in an isolated temporary project, including the latest skill instructions and native calendar resources. Both the [skills.sh repository page](https://www.skills.sh/wauputr4/astron) and [Astron detail page](https://www.skills.sh/wauputr4/astron/astron) now render successfully with the current skill content. Earlier read-only `--list` checks did not register an installation and were insufficient to verify directory availability. Install counts may update separately; no count is claimed here. See [installation and discovery notes](references/install.md).
 
-**Distribution policy:** GitHub is the canonical source and Astron remains **AGPL-3.0-only**. Install current releases from GitHub using the skills CLI. The skills.sh badge is the official repository install-count badge; it does not certify that the individual skill detail page has been indexed.
-
-The [ClawHub listing](https://clawhub.ai/wauputr4/skills/astron) is a **legacy v1.0.0 release**, not the current GitHub feature set. This is a plain listing link, not an official badge or a claim of an updated or license-compatible release. The previous custom Shields.io badge has been removed; no official ClawHub README badge endpoint has been verified. New ClawHub publication is on hold because the platform requires MIT-0 with no per-skill override. No repository relicensing or separate MIT-0 package is being made. See the license note below.
+**Distribution policy:** GitHub is the canonical source for the full AGPL-3.0-only Astron engine and workflows. ClawHub distributes a separate MIT-0 instruction package; it does not bundle the Python engine, dependencies or macOS companion. See [publication instructions](distribution/clawhub/README.md). The skills.sh badge is an official install-count badge, not a compatibility certification.
 
 ## Start a conversation
 
@@ -124,10 +122,10 @@ Astron is developed at **[github.com/wauputr4/astron](https://github.com/wauputr
 - Native UI changes also need the CLT build/signature checks and a separate real-desktop visual test; compilation alone is not proof of rendering.
 - Keep the distinction between calculated facts, symbolic interpretation, and subjective feedback. Contributions must preserve consent and privacy boundaries.
 
-This repository is AGPL-3.0-only; review its license and the dependencies' terms before contributing or redistributing. ClawHub releases are separate from GitHub pushes; the unresolved registry-license conflict below currently blocks a new ClawHub release.
+The engine and full workflows are AGPL-3.0-only; review dependency terms before redistribution. The isolated ClawHub instruction package is MIT-0. ClawHub publication is separate from a GitHub push.
 
 ## License
 
-**AGPL-3.0-only.** See [LICENSE](LICENSE). Kerykeion and pyswisseph have their own license terms; review their upstream licenses before redistribution or public deployment.
+**AGPL-3.0-only**, except the explicitly isolated files in `distribution/clawhub/`, which are **MIT-0** under their [local LICENSE](distribution/clawhub/LICENSE). The root [LICENSE](LICENSE) continues to apply to the engine, root skill workflows and macOS companion. Kerykeion and pyswisseph retain their own terms.
 
-**Unresolved ClawHub discrepancy:** ClawHub labels published skills MIT-0 by platform policy, while this repository and its bundled license state AGPL-3.0-only. The licensing implications of that copy have not been resolved. Do not assume the registry label changes this repository’s license.
+The ClawHub package consists only of `SKILL.md.in` (renamed `SKILL.md` for publication) and its MIT-0 `LICENSE`. It references the separately installed AGPL engine without bundling or relicensing it. This separation applies to new releases and does not retroactively resolve the old v1.0.0 registry-label discrepancy.
