@@ -1,7 +1,7 @@
 # Astron
 
 [![skills.sh](https://www.skills.sh/b/wauputr4/astron)](https://skills.sh/wauputr4/astron)
-[![ClawHub — v1.0.0 legacy](https://img.shields.io/badge/ClawHub-v1.0.0%20%28legacy%29-orange)](https://clawhub.ai/wauputr4/skills/astron)
+[ClawHub — legacy v1.0.0](https://clawhub.ai/wauputr4/skills/astron)
 
 [GitHub repository](https://github.com/wauputr4/astron) · [Report an issue](https://github.com/wauputr4/astron/issues) · [Contribute](#contributing)
 
@@ -35,11 +35,11 @@ To inspect the public repository without installing:
 npx skills add wauputr4/astron --skill astron --list
 ```
 
-**Discovery status (2026-11-11):** skills CLI 1.8.1 successfully discovered `astron` from the public GitHub repository. The [skills.sh detail URL](https://skills.sh/wauputr4/astron/astron) currently displays an “isn’t available in this repository” page, despite successful CLI discovery. Directory indexing and GitHub installability are separate; do not treat that page as verified publication. See [installation and discovery notes](references/install.md).
+**Verified availability (2026-11-11):** a real, project-scoped skills CLI installation from GitHub succeeded in an isolated temporary project, including the latest skill instructions and native calendar resources. Both the [skills.sh repository page](https://www.skills.sh/wauputr4/astron) and [Astron detail page](https://www.skills.sh/wauputr4/astron/astron) now render successfully with the current skill content. Earlier read-only `--list` checks did not register an installation and were insufficient to verify directory availability. Install counts may update separately; no count is claimed here. See [installation and discovery notes](references/install.md).
 
 **Distribution policy:** GitHub is the canonical source and Astron remains **AGPL-3.0-only**. Install current releases from GitHub using the skills CLI. The skills.sh badge is the official repository install-count badge; it does not certify that the individual skill detail page has been indexed.
 
-The [ClawHub listing](https://clawhub.ai/wauputr4/skills/astron) is a **legacy v1.0.0 release**, not the current GitHub feature set. Its orange badge is a status link, not a claim of an updated or license-compatible release. New ClawHub publication is on hold because the platform requires MIT-0 with no per-skill override. No repository relicensing or separate MIT-0 package is being made. See the license note below.
+The [ClawHub listing](https://clawhub.ai/wauputr4/skills/astron) is a **legacy v1.0.0 release**, not the current GitHub feature set. This is a plain listing link, not an official badge or a claim of an updated or license-compatible release. The previous custom Shields.io badge has been removed; no official ClawHub README badge endpoint has been verified. New ClawHub publication is on hold because the platform requires MIT-0 with no per-skill override. No repository relicensing or separate MIT-0 package is being made. See the license note below.
 
 ## Start a conversation
 

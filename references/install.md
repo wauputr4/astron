@@ -22,7 +22,7 @@ npx skills add wauputr4/astron --skill astron --list
 
 The repository-root `SKILL.md` with `name` and `description` frontmatter is a supported discovery layout. No separate registry manifest is required for this layout.
 
-## Verified status: 2026-11-11
+## Earlier read-only discovery: 2026-11-11
 
 Commands run:
 
@@ -60,7 +60,7 @@ isn’t available in this repository.
 It may have been renamed or removed.
 ```
 
-An HTTP success response alone therefore does not establish that the directory page is available. The directory/indexing status remains unresolved even though direct CLI discovery works.
+An HTTP success response alone therefore does not establish that the directory page is available. This was the earlier status; the later actual-install verification below supersedes it.
 
 ## How directory listing works
 
@@ -91,4 +91,17 @@ ClawHub's [skill-format license policy](https://github.com/openclaw/clawhub/blob
 
 ## Current distribution decision
 
-Keep AGPL-3.0-only and GitHub as the canonical distribution path. The existing ClawHub v1.0.0 listing is legacy; do not republish the AGPL bundle under MIT-0 or imply that it contains the latest GitHub functionality. No separate MIT-0 package is planned by this change. README badges link to the official skills.sh repository badge and the explicitly labeled legacy ClawHub listing; badges are navigation/status aids, not evidence of indexing, compatibility, or desktop verification.
+Keep AGPL-3.0-only and GitHub as the canonical distribution path. The existing ClawHub v1.0.0 listing is legacy; do not republish the AGPL bundle under MIT-0 or imply that it contains the latest GitHub functionality. No separate MIT-0 package is planned by this change. The README uses the documented official skills.sh repository badge and a plain, explicitly labeled legacy ClawHub listing link. The previous custom Shields.io ClawHub badge was not official and has been removed. A badge alone is not evidence of indexing, compatibility, or desktop verification.
+
+
+## Actual installation and live pages verified: 2026-11-11
+
+After checking the official FAQ and `vercel-labs/skills` telemetry source, performed an actual project-scoped installation in an isolated temporary project—not merely `--list`. No global install, owner birth data, journal access, or live Astron checkout replacement was involved. The supported CLI was used normally, without manually submitting telemetry or altering installation counts. Existing telemetry opt-out settings were not changed. The test command included an explicit purpose label:
+
+```sh
+npx --yes skills add wauputr4/astron --skill astron --agent claude-code --copy --yes --metadata '{"purpose":"publisher-install-smoke-test"}'
+```
+
+The CLI reported successful installation. The copied `SKILL.md` included the GitHub contribution links, and the native `sky_calendar.py` resource was present. Afterward, both <https://www.skills.sh/wauputr4/astron> and <https://www.skills.sh/wauputr4/astron/astron> returned HTTP 200 and rendered real content: the repository page listed one skill, and the detail page showed the current source/contribution links and Langit & Kamu workflow. They no longer showed the previous 404. This sequence is consistent with the documented installation-telemetry indexing path; no manual registry manifest was added. Displayed install counts are not evidence of completed indexing for every surface and may update separately.
+
+Official badge format: `[![skills.sh](https://skills.sh/b/owner/repo)](https://skills.sh/owner/repo)` from <https://www.skills.sh/docs>. The README uses the same official route on its canonical `www.skills.sh` host (verified SVG), not a custom Shields.io substitute. ClawHub's latest was independently rechecked as v1.0.0 with MIT-0; source updates on GitHub do not update that release. No official ClawHub README-badge endpoint has been verified, so its legacy listing is a plain link instead of a custom badge presented as official.
