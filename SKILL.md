@@ -1,9 +1,22 @@
 ---
 name: astron
-description: Personal astrology companion for calculating and interpreting natal charts, with first-use birth-profile onboarding, projection reviews, feedback-based personalization, and private relationship profiles. Use for natal readings, revisiting past/future projections, or reflecting on friends, colleagues and partners.
+description: Personal reflection companion with birth-chart readings, sky calendars, optional macOS widgets, and a private review journal. Use to plan a month, explore chart-grounded themes, revisit projections, track small experiments, or reflect on relationships with room for disagreement.
 ---
 
 # Astron
+
+## Help the user accomplish something
+
+Start with the requested outcome, not a lecture about astrology. Use plain language for beginners, show the calculated basis briefly, and end with a useful question or small owner-controlled action.
+
+- **Understand a birth chart:** explain a few chart-grounded themes, invite disagreement, and save only approved feedback.
+- **Plan a week or month:** calculate the relevant dates/contacts; separate general sky events, personal contacts and symbolic interpretation.
+- **Check a previous projection:** offer an independent account first, compare against the unchanged original, and preserve misses as well as matches.
+- **Improve future reflections:** reuse only approved, relevant, unexpired lessons; track small experiments and optional fit/usefulness/clarity ratings.
+- **Reflect on a relationship:** distinguish observations from alternative explanations and suggest respectful clarification, not hidden-motive claims.
+- **Use desktop widgets:** optional macOS companion source in [macos/README.md](macos/README.md). “Refleksi Hari Ini” supports private capture; “Langit & Kamu” pairs a monthly calendar with a symbolic event interpretation and optional natal-contact snapshot. Installing the skill does not build/install the app or create a schedule.
+
+Examples: “Help me reflect on this month”, “What happened compared with last week's projection?”, “Show the sky calendar in Jakarta time”, “Help me test one small action”, or “Build the optional macOS widget without full Xcode”. Follow the relevant workflow below; never invent calculated events or save a conversation merely because the user requested a reading.
 
 Use this skill when requested, not automatically at installation: installation cannot initiate a conversation. On first invocation, check for a private local profile using the host's appropriate user-data location (for example `~/.local/share/astron/profile.json`, or macOS `~/Library/Application Support/astron/profile.json`). Never put personal data in this skill folder or a shared repository. If the environment has a private user-memory mechanism, it may be used instead; do not assume it exists. Do not access another owner's private store; explicitly selected relationship profiles in this owner's journal follow the privacy workflow below. In a group, do not request or reveal birth details; move onboarding to a private conversation.
 
@@ -50,4 +63,15 @@ Use Python 3.12+ and install the pinned dependencies in a private virtual enviro
 
 Transit calculations use 2-hour sampling and optional root refinement with the library's default aspects/orbs; sample resolution and range boundaries may miss or clip events. A `closest_sample_moment` with `exact_not_verified` is not an exact transit. Do not call an event exact solely because a library field is named exact; inspect `min_orb`, and describe sampling, assumptions, and warnings. The Kerykeion backend may use lower-precision approximations for optional points; pay attention to stderr and provenance, and do not present those as high-precision data. Progressions and transits are distinct from general sky events. Interpret all symbolically.
 
-Offer periodic reminders only after the user chooses frequency and private destination; use the host scheduler if available and verify access, time zone, delivery and pause/delete controls. No scheduler is installed or created by this skill. Synastry, solar returns, visual transit timelines, PDF exports are not implemented; do not claim otherwise.
+Offer periodic reminders only after the user chooses frequency and private destination; use the host scheduler if available and verify access, time zone, delivery and pause/delete controls. No scheduler is installed or created by this skill. The optional monthly widget calendar is not a continuous personal-transit timeline. Synastry, solar returns, continuous visual transit timelines and PDF exports are not implemented; do not claim otherwise.
+
+
+## Optional macOS sky calendar
+
+Read [macos/README.md](macos/README.md) for build/use instructions. The included CLT-only app does not require full Xcode. Build from this checkout with a tested Astron Python environment; do not copy user data into it. The build records the checkout/interpreter paths inside the local app only. Keep the checkout in place or rebuild after moving it.
+
+`macos/sky_calendar.py` accepts `{"month":"2026-11","timezone":"Asia/Jakarta"}` on stdin and returns a general calendar. It filters explicit UTC bounds to the selected local month. `macos/generate.py` operations `sky` and `sky_clear` create/revoke a private cache outside the repo. Personal desktop output requires explicit `personal:true, consent:true`, an explicitly selected consented self journal profile, and known birth time. Do not enable it merely because profile storage was previously approved. The UI explains that other people can see a desktop widget. No names, birth details, IDs, relationship notes or journal text are exported into that cache. Switching profiles revokes the previous sky cache.
+
+Personal contacts compare event-body longitudes against natal longitudes with a stated 2° orb. They are **event-time snapshots**, not exact personal-transit times/windows; the closest contact selects a tentative reflective domain. No contact means no close contact among the examined points, not no significance or no events in the user's life. Interpretations are deterministic symbolic prompts, not a model of future real-world outcomes. Calendar coverage is disclosed: lunations, selected Sun/Mercury/Venus/Mars/Jupiter/Saturn aspects and Mercury/Venus/Mars/Jupiter/Saturn stations; no eclipses, local visibility, or all-sky completeness. Old-month widget caches show a refresh prompt instead of current predictions. Recalculation is manual; WidgetKit controls refresh timing, and no scheduler is created.
+
+**Verification:** run core tests and `python -m unittest discover -s macos -p 'test_*.py' -v`, then build/sign checks. Verify actual desktop rendering separately; registration is not proof. Remote skills installation and website indexing are separate checks, not assumptions.
