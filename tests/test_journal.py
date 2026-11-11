@@ -34,7 +34,7 @@ class JournalTest(unittest.TestCase):
         self.assertEqual(self.call('due', profile_id=pid), [])
         learning = self.call('learning', profile_id=pid)
         self.assertEqual(learning['outcomes']['missed'], 1)
-        self.assertEqual(len(learning['lessons']), 1)
+        self.assertEqual(len(learning['legacy_lessons']), 1)
         self.assertEqual(self.call('learning', profile_id=other)['lessons'], [])
         self.assertEqual((Path(self.tmp.name)/'journal.sqlite3').stat().st_mode & 0o777, 0o600)
     def test_corrections_preserve_original_and_do_not_double_count(self):

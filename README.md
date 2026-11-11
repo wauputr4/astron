@@ -28,11 +28,22 @@ Astron can preserve a dated projection, revisit it with your feedback (matched, 
 
 Store aliases for yourself, friends, colleagues, new acquaintances or partners, with sourced observations and optional voluntarily supplied birth data. Interpretations remain tentative and separate from facts. Without birth data, use behavior-based reflection, not a fabricated chart. No sensitive-trait or hidden-motive inference.
 
-The standard-library helper `scripts/journal.py` uses a local SQLite journal outside this repository (directory 0700, file 0600); no new dependencies. Data is not encrypted by the helper. Storage requires permission; corrections keep history, and explicit profile deletion cascades to linked journal records. The chat provider and normal backups may still retain information. Existing birth profile files are not automatically migrated. Reviews are offered when Astron is invoked: no background reminder or native-widget integration is created. See [the workflow and CLI reference](references/reflective-learning.md).
+The standard-library helper `scripts/journal.py` uses a local SQLite journal outside this repository (directory 0700, file 0600); no new dependencies. Data is not encrypted by the helper. Storage requires permission; corrections keep history, and explicit profile deletion cascades to linked journal records. The chat provider and normal backups may still retain information. Existing birth profile files are not automatically migrated. Reviews are offered when Astron is invoked: no background reminder is created. An optional `widget_data` bridge supports a separately installed macOS companion; the skill does not install a native app. See [the workflow and CLI reference](references/reflective-learning.md).
 
 ```sh
 python3 -m unittest discover -s tests -p test_journal.py -v
 ```
+
+### Evaluation tools
+
+- Independent check-in before revealing a projection (`blind_due`, `checkin_add`).
+- Separate optional 1–5 fit, usefulness and clarity ratings, with denominators and no automatic accuracy claim.
+- Approved lessons with context, temporary/recurring/review/retired lifecycle and review dates. Expired or corrected evidence stops automatic reuse; old records are preserved.
+- Small owner-controlled experiments: action, observables, period, whether attempted and the actual result.
+- Relationship notes with alternative explanations, supporting/counter-evidence and respectful clarifying questions.
+- Privacy-safe `widget_data` (explicit self profile only): generic question/action/lesson reference, with no names or raw private text. Capture URL opens the separately installed app; opening never automatically writes.
+
+The new SQLite tables are additive. Existing review-level lessons remain as `legacy_lessons`; owner-approved migration into contextual lessons is required before reuse. No real personal records are created by tests.
 
 ## Scope and limitations
 

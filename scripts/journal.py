@@ -6,6 +6,7 @@ import sqlite3
 import sys
 from datetime import date, datetime, timezone
 from uuid import uuid4
+import reflection
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS profiles(id TEXT PRIMARY KEY, created_at TEXT NOT NULL, data TEXT NOT NULL);
@@ -26,7 +27,11 @@ def day(value):
 
 
 def execute(db, p):
+    if not isinstance(p, dict):
+        raise ValueError('input must be a JSON object')
     op = p.get('operation')
+    if op in reflection.OPS:
+        return reflection.execute(db, p)
     now = datetime.now(timezone.utc).isoformat()
     def rows(table, where='', args=()):
         return [dict(id=r[0], created_at=r[1], **json.loads(r[2])) for r in db.execute(
@@ -107,7 +112,21 @@ def execute(db, p):
         outcome = text(p, 'outcome')
         if outcome not in ('matched', 'partial', 'missed', 'unclear', 'not_applicable'):
             raise ValueError('invalid outcome')
-        payload = dict(projection_id=ident, outcome=outcome, experience=text(p, 'experience'),
+        ratings = p.get('ratings', {})
+        if not isinstance(ratings, dict) or not set(ratings) <= {'fit', 'usefulness', 'clarity'}:
+            raise ValueError('ratings supports fit, usefulness and clarity only')
+        for key, value in ratings.items():
+            if type(value) is not int or not 1 <= value <= 5:
+                raise ValueError('each supplied rating must be an integer 1–5')
+        checkin_id = p.get('checkin_id')
+        if checkin_id:
+            checkin = require('checkins', checkin_id)
+            projection = require('projections', ident)
+            if checkin['profile_id'] != projection['profile_id']:
+                raise ValueError('check-in belongs to another profile')
+            if (checkin['period_start'], checkin['period_end']) != (projection['period_start'], projection['period_end']):
+                raise ValueError('check-in period must match projection period')
+        payload = dict(projection_id=ident, ratings=ratings, checkin_id=checkin_id, outcome=outcome, experience=text(p, 'experience'),
             source=text(p, 'source'), lesson=p.get('lesson', ''),
             lesson_approved=p.get('lesson_approved') is True,
             supersedes=p.get('supersedes'))
@@ -140,7 +159,14 @@ def execute(db, p):
             return [r for r in projections if r['review_after'] <= today and r['id'] not in reviewed and r['id'] not in superseded]
         counts = {key: sum(r['outcome'] == key for r in active) for key in ('matched', 'partial', 'missed', 'unclear', 'not_applicable')}
         return dict(outcomes=counts, reviewed_projections=len({r['projection_id'] for r in active}),
-            lessons=[r for r in active if r['lesson_approved'] and r['lesson']],
+            legacy_lessons=[r for r in active if r['lesson_approved'] and r['lesson']],
+            lessons=[r for r in reflection.execute(db, {'operation':'lessons','profile_id':ident})
+                     if r['approved'] and r['effective_status'] in ('temporary','recurring')],
+            lessons_needing_review=[r for r in reflection.execute(db, {'operation':'lessons','profile_id':ident})
+                                   if r['effective_status']=='needs_review'],
+            rating_summary={key: {'count':len(values), 'mean':sum(values)/len(values) if values else None}
+                for key in ('fit','usefulness','clarity')
+                for values in [[r.get('ratings',{}).get(key) for r in active if key in r.get('ratings',{})]]},
             warning='Self-reported feedback, not predictive accuracy or scientific validation. Never apply lessons across profiles automatically.')
     raise ValueError('unknown operation')
 
@@ -165,7 +191,7 @@ def main():
     with sqlite3.connect(path) as db:
         os.chmod(path, 0o600)
         db.execute('PRAGMA foreign_keys=ON')
-        db.executescript(SCHEMA)
+        db.executescript(SCHEMA + reflection.SCHEMA)
         result = execute(db, p)
     print(json.dumps(result, ensure_ascii=False))
 
