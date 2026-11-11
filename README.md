@@ -87,7 +87,7 @@ The source builds with Swift and Apple Command Line Tools, without full Xcode. F
 
 The companion is separate from `npx skills add`. Personal desktop output is off by default and requires a selected consented self profile, known birth time and separate display opt-in. Names, birth details and raw journal text do not enter widget caches. Opening capture never automatically saves. Calendars refresh manually; no scheduler is installed.
 
-**Verification (2026-11-11):** 28 core tests plus 16 bridge/calendar tests passed; the CLT build, signature verification, local installation and extension registration succeeded. Actual companion/widget rendering and click-through remain **unverified**: desktop testing was blocked by the Mac lock screen. Registration is not rendering proof.
+**Verification (2026-11-11):** 28 core tests plus 16 bridge/calendar tests passed; the CLT build, signature verification, local installation and extension registration succeeded. Desktop verification subsequently exposed an extension bootstrap crash; the CLT linker now enters through `_NSExtensionMain` while retaining the Swift `_main`. After rebuild/install, both widget configurations appeared in the gallery (all supported size previews rendered). A medium Langit & Kamu widget rendered on the desktop, and clicking November 13 opened the corresponding Mercury-direct detail in the companion. Calendar date selection, capture navigation and journal settings were inspected without saving records or enabling natal display. Small/large desktop placement and consented journal saving were not tested; gallery previews are not placement proof.
 
 ## Privacy and control
 

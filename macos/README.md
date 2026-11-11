@@ -62,3 +62,12 @@ rtk proxy ~/.local/share/astron/venv/bin/python macos/sky_calendar.py <<<'{"mont
 ```
 
 Do not commit cache files or build/backups. The source-only GitHub package is not a notarized binary release. An installed/registered extension still requires separate desktop-render verification.
+
+
+## Desktop verification (2026-11-11)
+
+The extension initially registered but crashed during `_EXRunningExtension` bootstrap and did not appear in the gallery. The CLT build now links the widget with `-application-extension`, `-e _NSExtensionMain` and `-u _main`: the classic extension bootstrap runs first and retains the Swift WidgetBundle entry. This follows the bootstrap/retention approach described in [xtool PR #393](https://github.com/xtool-org/xtool/pull/393), and was independently verified on this Mac after installation. No full Xcode installation or registry reset was needed.
+
+Both configurations and all five supported size previews rendered in Edit Widgets. A medium Langit & Kamu widget was placed on the desktop; clicking November 13 opened its Mercury-direct detail in the companion. Companion calendar selection, capture navigation, expansion and journal-settings controls were inspected without saving private records or enabling natal output. Small/large desktop placement and actual consented journal writes remain outside this visual check.
+
+Quit an already-running Astron before reopening after an update: replacing the app bundle does not replace the old process in memory. Registration and signature checks alone cannot catch this bootstrap failure; always repeat the gallery and desktop click-through test after linker changes.

@@ -100,7 +100,11 @@ write_plist(APP / 'Contents/Resources/runtime-paths.plist', {
 sdk = run('/usr/bin/xcrun', '--sdk', 'macosx', '--show-sdk-path', capture=True).stdout.strip()
 arch = os.uname().machine
 for source, output in [('App.swift', APP / 'Contents/MacOS/Astron'), ('Widget.swift', APP / EXT / 'Contents/MacOS/AstronWidget')]:
-    run('/usr/bin/xcrun', 'swiftc', '-parse-as-library', '-O', '-sdk', sdk, '-target', f'{arch}-apple-macos14.0', HERE / source, HERE / 'SkyViews.swift', '-o', output)
+    # Classic appex bootstrap must run before WidgetKit's retained Swift main.
+    extension_flags = ['-application-extension', '-Xlinker', '-e', '-Xlinker', '_NSExtensionMain',
+                       '-Xlinker', '-u', '-Xlinker', '_main'] if source == 'Widget.swift' else []
+    run('/usr/bin/xcrun', 'swiftc', '-parse-as-library', '-O', *extension_flags,
+        '-sdk', sdk, '-target', f'{arch}-apple-macos14.0', HERE / source, HERE / 'SkyViews.swift', '-o', output)
 run('/usr/bin/codesign', '--force', '--sign', '-', '--entitlements', widget_entitlements, APP / EXT)
 args = ['/usr/bin/codesign', '--force', '--sign', '-']
 if app_entitlements:
