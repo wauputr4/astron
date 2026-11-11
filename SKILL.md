@@ -1,11 +1,11 @@
 ---
 name: astron
-description: Personal astrology companion for calculating and interpreting natal charts, with first-use birth-profile onboarding and conversational feedback. Use for personal natal readings or astrology questions involving the user's chart.
+description: Personal astrology companion for calculating and interpreting natal charts, with first-use birth-profile onboarding, projection reviews, feedback-based personalization, and private relationship profiles. Use for natal readings, revisiting past/future projections, or reflecting on friends, colleagues and partners.
 ---
 
 # Astron
 
-Use this skill when requested, not automatically at installation: installation cannot initiate a conversation. On first invocation, check for a private local profile using the host's appropriate user-data location (for example `~/.local/share/astron/profile.json`, or macOS `~/Library/Application Support/astron/profile.json`). Never put personal data in this skill folder or a shared repository. If the environment has a private user-memory mechanism, it may be used instead; do not assume it exists. Do not access another person's profile. In a group, do not request or reveal birth details; move onboarding to a private conversation.
+Use this skill when requested, not automatically at installation: installation cannot initiate a conversation. On first invocation, check for a private local profile using the host's appropriate user-data location (for example `~/.local/share/astron/profile.json`, or macOS `~/Library/Application Support/astron/profile.json`). Never put personal data in this skill folder or a shared repository. If the environment has a private user-memory mechanism, it may be used instead; do not assume it exists. Do not access another owner's private store; explicitly selected relationship profiles in this owner's journal follow the privacy workflow below. In a group, do not request or reveal birth details; move onboarding to a private conversation.
 
 ## First-use onboarding
 
@@ -19,6 +19,16 @@ Use this skill when requested, not automatically at installation: installation c
 ## Subsequent readings
 
 Use the saved profile only in the owner's private context. Recalculate if birth details change. Distinguish actual chart data from interpretation and user feedback. Do not infer precise houses from unknown time. For transit and secondary progression requests use the tested local calculator described below; do not fabricate missing events or portray sampled boundaries as exact. Do not claim automated installation onboarding or cross-machine memory.
+
+## Evaluation, learning and relationship profiles
+
+Read [references/reflective-learning.md](references/reflective-learning.md) before storing projections, validating past readings, applying feedback, or creating/referring to a friend, colleague, acquaintance or partner profile. Use `scripts/journal.py` (standard-library SQLite, private local storage) for durable records; do not rely on chat recall alone. At each invocation, select the intended profile, retrieve approved `learning`, and check `due` before offering a relevant review. Keep this light and respect a declined review.
+
+Record the original projection before its outcome is known; retrospective readings are labeled separately. Ask open questions and retain matches, misses, uncertainty and counterexamples. Only save actual user feedback and approved lessons; never reinterpret a miss as a success or change calculated positions to fit it. Apply relevant lessons to future reflections while acknowledging that personalization is not scientific validation or model training. Corrections preserve originals using linked new versions.
+
+For another person, support an alias-based private profile with sourced observations and optional voluntarily supplied birth data, not a definitive personality verdict. Without birth information, use behavior-based reflection rather than fabricating astrology. Separate facts, the owner's perceptions and tentative interpretations; never infer sensitive traits or hidden motives. Obtain owner permission for saved content, minimize third-party details and never expose profiles in groups. No automatic scheduler or macOS widget integration is installed by this journal workflow.
+
+**Verification:** saved record IDs and immutable original text are retrievable, feedback belongs to the correct profile, and any used lesson is explicitly approved and sourced. See the reference for CLI schemas, deletion scope and tests.
 
 ## Sky event calendar
 
@@ -40,4 +50,4 @@ Use Python 3.12+ and install the pinned dependencies in a private virtual enviro
 
 Transit calculations use 2-hour sampling and optional root refinement with the library's default aspects/orbs; sample resolution and range boundaries may miss or clip events. A `closest_sample_moment` with `exact_not_verified` is not an exact transit. Do not call an event exact solely because a library field is named exact; inspect `min_orb`, and describe sampling, assumptions, and warnings. The Kerykeion backend may use lower-precision approximations for optional points; pay attention to stderr and provenance, and do not present those as high-precision data. Progressions and transits are distinct from general sky events. Interpret all symbolically.
 
-Offer periodic reminders only after the user chooses frequency and private destination; use the host scheduler if available and verify access, time zone, delivery and pause/delete controls. No scheduler is installed or created by this skill. Synastry, solar returns, visual transit timelines, PDF exports and journaling are not implemented; do not claim otherwise.
+Offer periodic reminders only after the user chooses frequency and private destination; use the host scheduler if available and verify access, time zone, delivery and pause/delete controls. No scheduler is installed or created by this skill. Synastry, solar returns, visual transit timelines, PDF exports are not implemented; do not claim otherwise.

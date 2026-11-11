@@ -1,6 +1,6 @@
 # Astron
 
-A personal astrology agent skill for private, reflective conversations. Computes natal data, general sky events, transit windows, secondary progressions and natal SVG charts. Astrology is symbolic reflection, not a scientific personality test or a guarantee of future events.
+A personal astrology agent skill for private, reflective conversations. Computes natal data, general sky events, transit windows, secondary progressions and natal SVG charts. Includes a private local projection journal and relationship profiles. Astrology is symbolic reflection, not a scientific personality test or a guarantee of future events.
 
 ## Install the skill
 
@@ -21,6 +21,18 @@ python3 -m venv .venv
 ```
 
 Install this directory as an AgentSkill and invoke `astron`; follow [SKILL.md](SKILL.md) for the JSON inputs and onboarding. No account, hosted AI service, or Hermex installation is required for local calculations. The chat provider may process conversations. Personal profiles and generated exports should stay outside the repository.
+
+## Reflective evaluation and people profiles
+
+Astron can preserve a dated projection, revisit it with your feedback (matched, partial, missed, unclear, not applicable), and reuse your approved lessons in later conversations. Originals remain intact; retrospective reflection is not presented as an advance prediction. This is memory-based personalization, not model retraining or scientific evidence of predictive accuracy.
+
+Store aliases for yourself, friends, colleagues, new acquaintances or partners, with sourced observations and optional voluntarily supplied birth data. Interpretations remain tentative and separate from facts. Without birth data, use behavior-based reflection, not a fabricated chart. No sensitive-trait or hidden-motive inference.
+
+The standard-library helper `scripts/journal.py` uses a local SQLite journal outside this repository (directory 0700, file 0600); no new dependencies. Data is not encrypted by the helper. Storage requires permission; corrections keep history, and explicit profile deletion cascades to linked journal records. The chat provider and normal backups may still retain information. Existing birth profile files are not automatically migrated. Reviews are offered when Astron is invoked: no background reminder or native-widget integration is created. See [the workflow and CLI reference](references/reflective-learning.md).
+
+```sh
+python3 -m unittest discover -s tests -p test_journal.py -v
+```
 
 ## Scope and limitations
 

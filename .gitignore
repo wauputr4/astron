@@ -6,3 +6,5 @@ profiles/
 exports/
 .env
 .DS_Store
+*.sqlite3
+*.sqlite3-*
