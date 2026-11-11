@@ -87,3 +87,8 @@ The source repository and contribution entry point are <https://github.com/waupu
 Rechecked the official [skills.sh FAQ](https://skills.sh/docs/faq) and [documentation](https://skills.sh/docs) on 2026-11-11: listing/ranking uses installation telemetry. No additional registration manifest is documented for a public GitHub repository with a discoverable root `SKILL.md`. A source link or `--list` inspection does not create an installation. Do not manufacture installs, promise immediate indexing, or treat a rendered 404 with HTTP 200 as a working listing.
 
 ClawHub's [skill-format license policy](https://github.com/openclaw/clawhub/blob/main/docs/skill-format.md#license) requires MIT-0 for every published skill and explicitly disallows conflicting terms or per-skill overrides. Astron's repository remains AGPL-3.0-only; no license change or new ClawHub publication is authorized by merely adding source links. Resolve rights and licensing before republishing; keep upstream dependency obligations intact.
+
+
+## Current distribution decision
+
+Keep AGPL-3.0-only and GitHub as the canonical distribution path. The existing ClawHub v1.0.0 listing is legacy; do not republish the AGPL bundle under MIT-0 or imply that it contains the latest GitHub functionality. No separate MIT-0 package is planned by this change. README badges link to the official skills.sh repository badge and the explicitly labeled legacy ClawHub listing; badges are navigation/status aids, not evidence of indexing, compatibility, or desktop verification.
