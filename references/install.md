@@ -78,3 +78,12 @@ Official references:
 ## License caution
 
 The GitHub repository is AGPL-3.0-only. Its ClawHub listing has an unresolved MIT-0 platform-label discrepancy; see the [README license note](../README.md#license). Directory availability does not resolve licensing terms.
+
+
+## Registry publication and source links
+
+The source repository and contribution entry point are <https://github.com/wauputr4/astron>. `SKILL.md` includes this link in its rendered body and the documented `metadata.openclaw.homepage` field; the README includes repository, issues and contribution links. ClawHub renders `SKILL.md`, so a README-only link is not sufficient to rely on for the skill's rendered page. New metadata will only reach ClawHub after a separate new-version publication, not a GitHub push.
+
+Rechecked the official [skills.sh FAQ](https://skills.sh/docs/faq) and [documentation](https://skills.sh/docs) on 2026-11-11: listing/ranking uses installation telemetry. No additional registration manifest is documented for a public GitHub repository with a discoverable root `SKILL.md`. A source link or `--list` inspection does not create an installation. Do not manufacture installs, promise immediate indexing, or treat a rendered 404 with HTTP 200 as a working listing.
+
+ClawHub's [skill-format license policy](https://github.com/openclaw/clawhub/blob/main/docs/skill-format.md#license) requires MIT-0 for every published skill and explicitly disallows conflicting terms or per-skill overrides. Astron's repository remains AGPL-3.0-only; no license change or new ClawHub publication is authorized by merely adding source links. Resolve rights and licensing before republishing; keep upstream dependency obligations intact.

@@ -1,9 +1,16 @@
 ---
 name: astron
 description: Personal reflection companion with birth-chart readings, sky calendars, optional macOS widgets, and a private review journal. Use to plan a month, explore chart-grounded themes, revisit projections, track small experiments, or reflect on relationships with room for disagreement.
+metadata:
+  openclaw:
+    homepage: https://github.com/wauputr4/astron
+    requires:
+      bins: [python3]
 ---
 
 # Astron
+
+**Source and contributions:** [GitHub repository](https://github.com/wauputr4/astron) · [Issues](https://github.com/wauputr4/astron/issues) · [Pull requests](https://github.com/wauputr4/astron/pulls). See the [README contribution guide](https://github.com/wauputr4/astron#contributing). Use synthetic examples only; never post birth data or private journals.
 
 ## Help the user accomplish something
 

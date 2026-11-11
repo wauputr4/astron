@@ -1,5 +1,7 @@
 # Astron
 
+[GitHub repository](https://github.com/wauputr4/astron) · [Report an issue](https://github.com/wauputr4/astron/issues) · [Contribute](#contributing)
+
 An astrology companion for your AI agent: calculate a chart, explore a period, and reflect on what actually happened. Astron combines local astronomical calculations with plain-language, symbolic interpretation and an optional private journal.
 
 **Astrology is a reflective practice, not a scientific personality test, a diagnosis, or a reliable prediction of future events.**
@@ -102,6 +104,22 @@ The journal uses Python’s standard-library SQLite support. Existing birth-prof
 - Ephemeris coverage and precision vary by body and backend. Inspect errors, warnings, and calculation provenance rather than treating a failed calculation as an empty calendar.
 - Symbolic ratings are subjective summaries, not probabilities or guarantees. Do not use readings to make consequential medical, financial, or legal decisions.
 - Synastry, solar returns, continuous personal-transit timelines, and PDF export are not implemented. No scheduler or automatic cross-machine memory is bundled.
+
+## Contributing
+
+Astron is developed at **[github.com/wauputr4/astron](https://github.com/wauputr4/astron)**. Bug reports, clearer documentation, calculation tests, accessibility improvements, and code contributions are welcome.
+
+- Open an [issue](https://github.com/wauputr4/astron/issues) with expected/actual behavior and a minimal **synthetic** example. Never attach real birth details, journal databases, or private widget caches.
+- For code changes, fork the repository and open a [pull request](https://github.com/wauputr4/astron/pulls). Keep changes focused and add regression tests.
+- Run the core tests and optional companion tests using the dedicated Python environment described above:
+  ```sh
+  "$HOME/.local/share/astron/venv/bin/python" -m unittest discover -s tests -v
+  "$HOME/.local/share/astron/venv/bin/python" -m unittest discover -s macos -p 'test_*.py' -v
+  ```
+- Native UI changes also need the CLT build/signature checks and a separate real-desktop visual test; compilation alone is not proof of rendering.
+- Keep the distinction between calculated facts, symbolic interpretation, and subjective feedback. Contributions must preserve consent and privacy boundaries.
+
+This repository is AGPL-3.0-only; review its license and the dependencies' terms before contributing or redistributing. ClawHub releases are separate from GitHub pushes; the unresolved registry-license conflict below currently blocks a new ClawHub release.
 
 ## License
 
