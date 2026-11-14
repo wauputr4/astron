@@ -19,7 +19,11 @@ def main():
         data["kind"] = kind
         return data
     moons = LunationFinderFactory.from_iso_range(start, end).lunations
-    aspects = MundaneAspectFactory.from_iso_range(start, end, points=x.get("points"), aspects=x.get("aspects")).aspects
+    from minor_aspects import ALIASES
+    selected = x.get("aspects")
+    if isinstance(selected, list):
+        selected = list(dict.fromkeys(ALIASES.get(name, name) for name in selected))
+    aspects = MundaneAspectFactory.from_iso_range(start, end, points=x.get("points"), aspects=selected).aspects
     stations = RetrogradeStationFactory.from_iso_range(start, end, planets=x.get("planets")).stations
     events = [event("lunation", z) for z in moons] + [event("aspect", z) for z in aspects] + [event("station", z) for z in stations]
     events.sort(key=lambda z: z["iso_utc"])

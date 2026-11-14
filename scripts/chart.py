@@ -61,6 +61,8 @@ def main():
                 points[name].update(chaldean_face(values[0]))
         except swe.Error as exc:
             missing[name] = str(exc)
+    from minor_aspects import requested, ANGLES, ORB
+    minor = requested(data)
     aspects = []
     for i, (a, pa) in enumerate(points.items()):
         for b, pb in list(points.items())[i + 1:]:
@@ -69,6 +71,10 @@ def main():
             for name, angle in (("conjunction",0),("sextile",60),("square",90),("trine",120),("opposition",180)):
                 orb = abs(separation-angle)
                 if orb <= 6: aspects.append({"left":a,"right":b,"type":name,"orb":round(orb, 4)})
+            for name in minor:
+                orb = abs(separation - ANGLES[name])
+                if orb <= ORB:
+                    aspects.append({"left": a, "right": b, "type": name, "orb": round(orb, 4)})
     houses = None
     warning = None
     if known:
@@ -89,6 +95,9 @@ def main():
         result["decan_system"] = "Chaldean"
         if not known:
             result["warning"] += " Decans refer only to this noon snapshot, especially for the fast-moving Moon."
+    if minor:
+        result["method"]["minor_aspects"] = minor
+        result["method"]["minor_aspect_orb_degrees"] = ORB
     json.dump(result, sys.stdout, ensure_ascii=False, indent=2, allow_nan=False)
     print()
 

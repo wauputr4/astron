@@ -5,6 +5,7 @@ from datetime import datetime, date, time, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from minor_aspects import requested, options, ORB
 from chart import birth_time_confirmed, chaldean_face
 
 def subject(x, *, calculate_dignities=False):
@@ -24,6 +25,8 @@ def subject(x, *, calculate_dignities=False):
 def main():
     from kerykeion import ChartDataFactory, ChartDrawer, EphemerisDataFactory, TransitsTimeRangeFactory, SecondaryProgressionFactory
     x=json.load(sys.stdin); op=x["operation"]
+    minor = requested(x)
+    aspect_options = options(minor, op)
     decans = x.get("include_decans", False)
     if not isinstance(decans, bool):
         raise ValueError("include_decans must be true or false")
@@ -32,7 +35,7 @@ def main():
     confirmed = op == "natal" and birth_time_confirmed(x["birth"])
     s=subject(x["birth"], calculate_dignities=decans)
     if op == "natal":
-        result=ChartDataFactory.create_natal_chart_data(s).model_dump(mode="json",exclude_none=True)
+        result=ChartDataFactory.create_natal_chart_data(s, **aspect_options).model_dump(mode="json",exclude_none=True)
         if decans:
             result["decan_system"] = "Chaldean"
             if confirmed:
@@ -44,7 +47,7 @@ def main():
         if out.suffix.lower() != ".svg": raise ValueError("Output must have .svg suffix")
         if out.exists(): raise ValueError("Output already exists")
         out.parent.mkdir(mode=0o700,parents=True,exist_ok=True)
-        svg = ChartDrawer(ChartDataFactory.create_natal_chart_data(s)).generate_svg_string(remove_css_variables=True)
+        svg = ChartDrawer(ChartDataFactory.create_natal_chart_data(s, **aspect_options)).generate_svg_string(remove_css_variables=True)
         fd = os.open(out, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
         with os.fdopen(fd, "w", encoding="utf-8") as f: f.write(svg)
         result={"output":str(out),"format":"svg","private":True}
@@ -56,15 +59,23 @@ def main():
         pts=["Sun","Moon","Mercury","Venus","Mars","Jupiter","Saturn","Uranus","Neptune","Pluto"]
         eph=EphemerisDataFactory(start,end,step_type="hours",step=2,lat=float(x["birth"]["latitude"]),lng=float(x["birth"]["longitude"]),tz_str="Etc/UTC",active_points=pts)
         samples=eph.get_ephemeris_data_as_astrological_subjects()
-        result=TransitsTimeRangeFactory(s,samples,active_points=pts).get_transit_events(refine_exact_moments=True).model_dump(mode="json",exclude_none=True)
+        result=TransitsTimeRangeFactory(s,samples,active_points=pts, **aspect_options).get_transit_events(refine_exact_moments=True).model_dump(mode="json",exclude_none=True)
         for ev in result.get("events", []):
             if ev.get("min_orb", 999) > 0.01 and ev.get("exact_moment"):
                 ev["closest_sample_moment"] = ev.pop("exact_moment")
                 ev["exact_not_verified"] = True
         result={"method":{"sampling_hours":2,"refine_exact_moments":True,"range_start":start.isoformat(),"range_end":end.isoformat(),"note":"Orb windows and exact times depend on sampling and library defaults; range edges may be clipped."},"data":result}
     elif op == "progression":
-        result=SecondaryProgressionFactory.compute_full(s,target_iso_utc_datetime=x["target_utc"]).model_dump(mode="json",exclude_none=True)
+        result=SecondaryProgressionFactory.compute_full(s,target_iso_utc_datetime=x["target_utc"], **aspect_options).model_dump(mode="json",exclude_none=True)
+        if minor:
+            # The progression factory has one orb for every aspect. Keep its major settings.
+            result["progressed_to_natal_aspects"] = [
+                hit for hit in result["progressed_to_natal_aspects"]
+                if hit["aspect"] not in minor or abs(hit["orb"]) <= ORB
+            ]
     else: raise ValueError("operation must be natal, svg, transits, or progression")
+    if minor:
+        result.setdefault("method", {}).update(minor_aspects=minor, minor_aspect_orb_degrees=ORB)
     if op != "svg" and x.get("output"):
         out = Path(x["output"]).expanduser().resolve()
         if out.suffix.lower() != ".json": raise ValueError("JSON output must have .json suffix")

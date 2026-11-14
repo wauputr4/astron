@@ -1,18 +1,22 @@
 ---
 name: astron
-description: Personal reflection companion with birth-chart readings, sky calendars, optional macOS widgets, and a private review journal. Use to plan a month, explore chart-grounded themes, revisit projections, track small experiments, or reflect on relationships with room for disagreement.
+description: Calculate natal charts, personal planetary transits, secondary progressions and local sky calendars. Use Astron to explain birth chart aspects and decans, review a previous reading, or keep a private reflection journal.
 metadata:
   openclaw:
-    homepage: https://github.com/wauputr4/astron
+    homepage: https://astron.wau.my.id
     requires:
       bins: [python3]
 ---
 
-# Astron
+# Astron — birth chart readings and personal transits
+
+Use Astron to answer a chart question with the planetary positions, angles and dates behind the reading. Start with the major aspects. When a user wants more detail, Chaldean decans describe a ten-degree subdivision of a sign, and minor aspects reveal additional relationships between planets. Report the measured orb so the user can judge how close an aspect is to exact.
+
+Explore [Astron Atlas](https://astron.wau.my.id), the interactive guide to zodiac signs, planets, houses and aspects.
 
 **Source and contributions:** [GitHub repository](https://github.com/wauputr4/astron) · [Issues](https://github.com/wauputr4/astron/issues) · [Pull requests](https://github.com/wauputr4/astron/pulls). See the [README contribution guide](https://github.com/wauputr4/astron#contributing). Use synthetic examples only; never post birth data or private journals.
 
-## Help the user accomplish something
+## Birth charts, calendars and reflection
 
 Start with the requested outcome, not a lecture about astrology. Use plain language for beginners, show the calculated basis briefly, and end with a useful question or small owner-controlled action.
 
@@ -80,7 +84,7 @@ Show the planet, sign, degree, decan and face ruler before the interpretation. K
 
 Use Python 3.12+ and install the pinned dependencies in a private virtual environment: `python3 -m venv ~/.local/share/astron/venv` then `~/.local/share/astron/venv/bin/python -m pip install -r <skill-directory>/requirements.txt`. Do not reuse Hermex or the developer test environment. Run `scripts/astron.py` with JSON on stdin and the venv interpreter; supply `birth` as `{"date":"1990-07-15","time":"10:30","timezone":"Europe/Rome","latitude":41.9028,"longitude":12.4964}`. `operation` is `natal` for JSON; optionally add `output` with a private `.json` path for natal, transits or progression (refuses overwrite); `svg` with an explicit private `output` ending in `.svg` for a natal chart; `transits` with timezone-aware `start_utc` and `end_utc` for a range of at most 370 days; or `progression` with `target_utc` for secondary progression JSON. Explain that saved SVG and JSON may contain sensitive birth details; do not share externally without permission. The SVG command refuses to overwrite existing files. For unknown birth time use `chart.py` and do not create a false house wheel, progression, or timed transit.
 
-Transit calculations use 2-hour sampling and optional root refinement with the library's default aspects/orbs; sample resolution and range boundaries may miss or clip events. A `closest_sample_moment` with `exact_not_verified` is not an exact transit. Do not call an event exact solely because a library field is named exact; inspect `min_orb`, and describe sampling, assumptions, and warnings. The Kerykeion backend may use lower-precision approximations for optional points; pay attention to stderr and provenance, and do not present those as high-precision data. Progressions and transits are distinct from general sky events. Interpret all symbolically.
+Transit calculations use 2-hour sampling and optional root refinement with the library's major aspect settings and any explicitly selected minor aspects; sample resolution and range boundaries may miss or clip events. A `closest_sample_moment` with `exact_not_verified` is not an exact transit. Do not call an event exact solely because a library field is named exact; inspect `min_orb`, and describe sampling, assumptions, and warnings. The Kerykeion backend may use lower-precision approximations for optional points; pay attention to stderr and provenance, and do not present those as high-precision data. Progressions and transits are distinct from general sky events. Interpret all symbolically.
 
 Offer periodic reminders only after the user chooses frequency and private destination; use the host scheduler if available and verify access, time zone, delivery and pause/delete controls. No scheduler is installed or created by this skill. The optional monthly widget calendar is not a continuous personal-transit timeline. Synastry, solar returns, continuous visual transit timelines and PDF exports are not implemented; do not claim otherwise.
 
@@ -94,3 +98,10 @@ Read [macos/README.md](macos/README.md) for build/use instructions. The included
 Personal contacts compare event-body longitudes against natal longitudes with a stated 2° orb. They are **event-time snapshots**, not exact personal-transit times/windows; the closest contact selects a tentative reflective domain. No contact means no close contact among the examined points, not no significance or no events in the user's life. Interpretations are deterministic symbolic prompts, not a model of future real-world outcomes. Calendar coverage is disclosed: lunations, selected Sun/Mercury/Venus/Mars/Jupiter/Saturn aspects and Mercury/Venus/Mars/Jupiter/Saturn stations; no eclipses, local visibility, or all-sky completeness. Old-month widget caches show a refresh prompt instead of current predictions. Recalculation is manual; WidgetKit controls refresh timing, and no scheduler is created.
 
 **Verification:** run core tests and `python -m unittest discover -s macos -p 'test_*.py' -v`, then build/sign checks. Verify actual desktop rendering separately; registration is not proof. Remote skills installation and website indexing are separate checks, not assumptions.
+
+
+## Optional minor aspects
+
+Use `"minor_aspects": true` for all five, or a list such as `["inconjunct", "sesquisquare"]` for specific aspects. Pass this field at the top level for natal JSON, SVG, personal transits, progressions, or the simple chart calculator. The minor orb is 2°. The five angles are semi-sextile (30°), semi-square (45°), quintile (72°), sesquiquadrate (135°, also called sesquisquare), and quincunx (150°, also called inconjunct). For exact mundane calendar events, use the existing `aspects` list.
+
+For a reading, name the pair, its measured orb and the chosen limit. Use a single everyday situation for comparisons and offer short answers: the first, the second, both, or neither. Treat the answer as personal feedback about the interpretation.

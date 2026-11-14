@@ -1,12 +1,20 @@
 ---
 name: astron
-description: Guide personal astrology reflection with Astron, using separately installed local AGPL calculators, optional journals and macOS widgets. Use for natal readings, sky calendars, period planning and reviewing earlier reflections.
+description: Use Astron with OpenClaw for natal chart readings, personal transits, secondary progressions, sky calendars and private astrology journaling. Calculations use the separately installed local Astron engine.
 metadata:
   openclaw:
-    homepage: https://github.com/wauputr4/astron
+    homepage: https://astron.wau.my.id
 ---
 
-# Astron
+# Astron for OpenClaw — birth charts and sky calendars
+
+Use Astron to understand a birth chart, follow the sky in your timezone and compare a reading with your experience. This package gives OpenClaw the reading instructions. The separately installed Astron engine calculates the positions and dates.
+
+- **Read a placement in context.** Connect its sign, house and aspects. With a compatible engine, explore Chaldean decans and five optional minor aspects with a 2° orb. Confirm birth time before interpreting Ascendant or Descendant decans.
+- **Explore a period.** Personal transits compare moving planets with the natal chart. Secondary progressions use a different symbolic timescale. A local sky calendar gives the dates of lunations, planetary aspects and stations.
+- **Revisit a reading.** Record an independent account first, then compare it with the original in an optional private journal. SVG and JSON exports let the user inspect the calculation later.
+
+Explore [Astron Atlas](https://astron.wau.my.id), the interactive guide to zodiac signs, planets, houses and aspects.
 
 This ClawHub instruction package is licensed MIT-0. The separately installed Astron engine, full workflows and optional macOS companion are AGPL-3.0-only, not included in this package. Dependencies retain their own licenses.
 
@@ -27,6 +35,8 @@ Once a checkout is available, read its SKILL.md and relevant workflow reference 
 2. Calculate with the local engine and inspect its warnings and provenance. If it is unavailable, explain the limitation; do not invent planetary positions or dated contacts.
 3. Separate computed placements/events from symbolic interpretations. Give tentative themes, invite disagreement and suggest a small user-controlled experiment. General sky events are not automatically personal transits; disclose aspect, orb and timing precision for natal comparisons.
 4. Treat astrology as symbolic reflection, not a scientific assessment or certain prediction. Do not infer diagnoses, sensitive traits or hidden motives, or use it to decide consequential medical, legal or financial questions.
+
+For minor-aspect questions, check the installed engine supports the optional minor aspects setting. Use a single familiar situation and short choices when comparing interpretations. Verify each measured angle and report its orb.
 
 ## Private records and reviews
 
