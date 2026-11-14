@@ -52,6 +52,28 @@ class DecanTest(unittest.TestCase):
             self.assertNotIn("decan_ruler", plain[key]["sun"])
             self.assertNotIn("decan_system", plain)
 
+    def test_angle_faces_require_both_options(self):
+        for confirmed, decans in [(True, True), (None, True), (False, True), (True, False)]:
+            birth = BIRTH.copy()
+            if confirmed is not None:
+                birth["time_confirmed"] = confirmed
+            simple = calculate("chart.py", {**birth, "include_decans": decans})
+            full = calculate("astron.py", {"operation":"natal", "birth":birth, "include_decans":decans})
+            for key in ("ascendant", "descendant"):
+                angle = full["subject"][key]
+                basic_angle = simple["houses"].get(key, {})
+                for field, expected in chaldean_face(angle["abs_pos"]).items():
+                    if confirmed and decans:
+                        self.assertEqual(angle[field], expected)
+                        self.assertEqual(basic_angle[field], expected)
+                    else:
+                        self.assertNotIn(field, angle)
+                        self.assertNotIn(field, basic_angle)
+        for invalid_birth in [{**BIRTH, "time_confirmed": "false"},
+                              {**BIRTH, "time": None, "time_confirmed": True}]:
+            with self.assertRaises(subprocess.CalledProcessError):
+                calculate("chart.py", {**invalid_birth, "include_decans": True})
+
     def test_unknown_time_is_a_noon_snapshot(self):
         noon = calculate("chart.py", {**BIRTH, "time":None, "include_decans":True})
         self.assertIsNone(noon["houses"])

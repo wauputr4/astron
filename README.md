@@ -49,7 +49,7 @@ Astron asks for missing birth details: date, local time if known, and birthplace
 
 Try these prompts:
 
-- “Show the decan of my Sun and explain how its face ruler relates to this placement.” Both natal JSON calculators accept the optional top-level field `"include_decans": true`. They report Chaldean faces for the seven classical bodies. A chart with unknown birth time reports provisional noon placements.
+- “Show the decan of my Sun and explain how its face ruler relates to this placement.” Both natal JSON calculators accept the optional top-level field `"include_decans": true`. They report Chaldean faces for the seven classical bodies. To include Ascendant and Descendant faces, also set `"time_confirmed": true` beside the confirmed birth time (inside `birth` for `astron.py`, at the top level for `chart.py`). A chart with unknown birth time reports provisional noon placements.
 - “Use Astron to explain my natal chart in everyday English. Give me three questions I can disagree with.”
 - “Calculate my transits for next month. Separate the calculation evidence, approximate timing, and symbolic interpretation.”
 - “Create a sky calendar for December 2026 in Asia/Jakarta, with lunations, aspects, and stations. Show local dates and the calculation source.”

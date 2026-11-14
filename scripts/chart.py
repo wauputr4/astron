@@ -17,12 +17,22 @@ def chaldean_face(longitude):
     return {"decan_number": sector % 3 + 1, "decan_ruler": FACE_RULERS[sector % 7]}
 
 
+def birth_time_confirmed(birth):
+    confirmed = birth.get("time_confirmed", False)
+    if not isinstance(confirmed, bool):
+        raise ValueError("time_confirmed must be true or false")
+    if confirmed and not birth.get("time"):
+        raise ValueError("A confirmed time requires a birth time")
+    return confirmed
+
+
 def main():
     import swisseph as swe
     data = json.load(sys.stdin)
     decans = data.get("include_decans", False)
     if not isinstance(decans, bool):
         raise ValueError("include_decans must be true or false")
+    confirmed = birth_time_confirmed(data)
     day = date.fromisoformat(data["date"])
     known = bool(data.get("time"))
     clock = time.fromisoformat(data["time"]) if known else time(12, 0)
@@ -65,6 +75,9 @@ def main():
         try:
             cusps, angles = swe.houses_ex(jd, lat, lon, b"P")
             houses = {"system":"Placidus", "ascendant":point(angles[0]), "midheaven":point(angles[1]), "cusps":[point(c) for c in cusps]}
+            if decans and confirmed:
+                houses["ascendant"].update(chaldean_face(angles[0]))
+                houses["descendant"] = {**point(cusps[6]), **chaldean_face(cusps[6])}
             for obj in points.values():
                 x = obj["longitude"]
                 obj["house"] = next((i+1 for i, c in enumerate(cusps) if (x-c)%360 < (cusps[(i+1)%12]-c)%360), None)

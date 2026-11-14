@@ -5,6 +5,8 @@ from datetime import datetime, date, time, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from chart import birth_time_confirmed, chaldean_face
+
 def subject(x, *, calculate_dignities=False):
     from kerykeion import AstrologicalSubjectFactory
     day = date.fromisoformat(x["date"])
@@ -27,11 +29,16 @@ def main():
         raise ValueError("include_decans must be true or false")
     if decans and op != "natal":
         raise ValueError("include_decans is supported for natal JSON")
+    confirmed = op == "natal" and birth_time_confirmed(x["birth"])
     s=subject(x["birth"], calculate_dignities=decans)
     if op == "natal":
         result=ChartDataFactory.create_natal_chart_data(s).model_dump(mode="json",exclude_none=True)
         if decans:
             result["decan_system"] = "Chaldean"
+            if confirmed:
+                for key in ("ascendant", "descendant"):
+                    angle = result["subject"][key]
+                    angle.update(chaldean_face(angle["abs_pos"]))
     elif op == "svg":
         out=Path(x["output"]).expanduser().resolve()
         if out.suffix.lower() != ".svg": raise ValueError("Output must have .svg suffix")
