@@ -7,9 +7,22 @@ from zoneinfo import ZoneInfo
 
 SIGNS = ("Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces")
 
+CLASSICAL_PLANETS = ("sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn")
+FACE_RULERS = ("Mars", "Sun", "Venus", "Mercury", "Moon", "Saturn", "Jupiter")
+
+
+def chaldean_face(longitude):
+    # Classify the ephemeris value before rounding coordinates for display.
+    sector = int((longitude % 360) // 10)
+    return {"decan_number": sector % 3 + 1, "decan_ruler": FACE_RULERS[sector % 7]}
+
+
 def main():
     import swisseph as swe
     data = json.load(sys.stdin)
+    decans = data.get("include_decans", False)
+    if not isinstance(decans, bool):
+        raise ValueError("include_decans must be true or false")
     day = date.fromisoformat(data["date"])
     known = bool(data.get("time"))
     clock = time.fromisoformat(data["time"]) if known else time(12, 0)
@@ -34,6 +47,8 @@ def main():
         try:
             values, flags = swe.calc_ut(jd, ident, swe.FLG_SWIEPH | swe.FLG_SPEED)
             points[name] = {**point(values[0]), "speed_degrees_per_day": round(values[3], 6), "retrograde": values[3] < 0, "returned_flags": flags}
+            if decans and name in CLASSICAL_PLANETS:
+                points[name].update(chaldean_face(values[0]))
         except swe.Error as exc:
             missing[name] = str(exc)
     aspects = []
@@ -57,6 +72,10 @@ def main():
     else:
         warning = "Unknown birth time: local noon assumed; positions and aspects can change, houses and angles omitted."
     result = {"method":{"zodiac":"tropical", "perspective":"geocentric apparent", "aspect_orb_degrees":6, "birth_time_known":known, "effective_local":naive.isoformat(), "timezone":data["timezone"], "utc":utc.isoformat(), "julian_day_ut":jd}, "points":points, "houses":houses, "aspects":aspects, "unavailable_points":missing, "warning":warning}
+    if decans:
+        result["decan_system"] = "Chaldean"
+        if not known:
+            result["warning"] += " Decans refer only to this noon snapshot, especially for the fast-moving Moon."
     json.dump(result, sys.stdout, ensure_ascii=False, indent=2, allow_nan=False)
     print()
 

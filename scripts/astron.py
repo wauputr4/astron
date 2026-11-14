@@ -5,7 +5,7 @@ from datetime import datetime, date, time, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-def subject(x):
+def subject(x, *, calculate_dignities=False):
     from kerykeion import AstrologicalSubjectFactory
     day = date.fromisoformat(x["date"])
     if not x.get("time"): raise ValueError("Exact birth time required for this operation; use chart.py for unknown time")
@@ -17,13 +17,21 @@ def subject(x):
     naive = datetime.combine(day, clock)
     candidates = {naive.replace(tzinfo=zone, fold=f).astimezone(timezone.utc) for f in (0,1)}
     if len([a for a in candidates if a.astimezone(zone).replace(tzinfo=None)==naive]) != 1: raise ValueError("Ambiguous or nonexistent local time")
-    return AstrologicalSubjectFactory.from_birth_data(name="Natal",city="Birthplace",nation="",year=day.year,month=day.month,day=day.day,hour=clock.hour,minute=clock.minute,lat=lat,lng=lon,tz_str=x["timezone"],online=False)
+    return AstrologicalSubjectFactory.from_birth_data(name="Natal",city="Birthplace",nation="",year=day.year,month=day.month,day=day.day,hour=clock.hour,minute=clock.minute,lat=lat,lng=lon,tz_str=x["timezone"],online=False,calculate_dignities=calculate_dignities)
 
 def main():
     from kerykeion import ChartDataFactory, ChartDrawer, EphemerisDataFactory, TransitsTimeRangeFactory, SecondaryProgressionFactory
-    x=json.load(sys.stdin); op=x["operation"]; s=subject(x["birth"])
+    x=json.load(sys.stdin); op=x["operation"]
+    decans = x.get("include_decans", False)
+    if not isinstance(decans, bool):
+        raise ValueError("include_decans must be true or false")
+    if decans and op != "natal":
+        raise ValueError("include_decans is supported for natal JSON")
+    s=subject(x["birth"], calculate_dignities=decans)
     if op == "natal":
         result=ChartDataFactory.create_natal_chart_data(s).model_dump(mode="json",exclude_none=True)
+        if decans:
+            result["decan_system"] = "Chaldean"
     elif op == "svg":
         out=Path(x["output"]).expanduser().resolve()
         if out.suffix.lower() != ".svg": raise ValueError("Output must have .svg suffix")
