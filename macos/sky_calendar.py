@@ -11,11 +11,11 @@ import sys
 from zoneinfo import ZoneInfo
 
 UTC = dt.timezone.utc
-PHASES = {'new_moon': 'Bulan baru', 'full_moon': 'Bulan purnama', 'first_quarter': 'Perbani awal', 'last_quarter': 'Perbani akhir'}
+PHASES = {'new': 'Bulan baru', 'full': 'Bulan purnama', 'first_quarter': 'Perbani awal', 'last_quarter': 'Perbani akhir'}
 ASPECTS = {'conjunction': 'konjungsi', 'sextile': 'sekstil', 'square': 'kuadrat', 'trine': 'trigon', 'opposition': 'oposisi'}
 PROMPTS = {
-    'new_moon': ('Ruang memulai', 'Pilih satu niat kecil; tidak perlu memulai semuanya sekaligus.'),
-    'full_moon': ('Ruang meninjau', 'Apa yang sudah terlihat jelas, dan apa yang belum kamu ketahui?'),
+    'new': ('Ruang memulai', 'Pilih satu niat kecil; tidak perlu memulai semuanya sekaligus.'),
+    'full': ('Ruang meninjau', 'Apa yang sudah terlihat jelas, dan apa yang belum kamu ketahui?'),
     'first_quarter': ('Ruang mencoba', 'Uji satu langkah kecil, lalu amati hasilnya.'),
     'last_quarter': ('Ruang merapikan', 'Tinjau satu kebiasaan yang masih berguna atau perlu diubah.'),
     'station': ('Ruang mengecek ulang', 'Periksa asumsi dan rencana; perubahan arah planet bukan jaminan gangguan.'),
@@ -60,8 +60,11 @@ def normalize(raw, natal=None):
     instant = dt.datetime.fromisoformat(raw['iso_utc'].replace('Z', '+00:00'))
     moving = {}
     if kind == 'lunation':
-        subtype = raw['phase']
-        title = PHASES.get(subtype, subtype)
+        phase = raw['phase']
+        subtype = {'new_moon': 'new', 'full_moon': 'full'}.get(phase, phase)
+        if subtype not in PHASES:
+            raise ValueError(f'Unsupported lunar phase: {phase}')
+        title = PHASES[subtype]
         moving = {'Sun': raw['sun']['abs_pos'], 'Moon': raw['moon']['abs_pos']}
     elif kind == 'station':
         subtype = 'station'
@@ -74,7 +77,7 @@ def normalize(raw, natal=None):
         moving = {raw['point_a']: raw['point_a_longitude'], raw['point_b']: raw['point_b_longitude']}
     else:
         raise ValueError('Unsupported event kind')
-    theme, interpretation = PROMPTS.get(subtype, PROMPTS['aspect'])
+    theme, interpretation = PROMPTS[subtype]
     linked = contacts(moving, natal) if natal is not None else []
     if linked:
         best = linked[0]

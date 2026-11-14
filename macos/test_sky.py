@@ -46,11 +46,23 @@ class CalendarTest(unittest.TestCase):
         self.assertGreaterEqual(len(result['events']), 4)
         self.assertTrue(all(e['day'].startswith('2026-11-') for e in result['events']))
         self.assertEqual(result['events'], sorted(result['events'], key=lambda e: e['utc']))
-        self.assertTrue(any(e['kind'] == 'lunation' for e in result['events']))
+        phases = {e['day']: (e['title'], e['theme']) for e in result['events'] if e['kind'] == 'lunation'}
+        self.assertEqual(phases['2026-11-09'], ('Bulan baru', 'Ruang memulai'))
+        self.assertEqual(phases['2026-11-24'], ('Bulan purnama', 'Ruang meninjau'))
         self.assertFalse(result['personal_enabled'])
         self.assertNotIn('birth', result)
         self.assertTrue(all(not e['contacts'] for e in result['events']))
         self.assertIn('kerykeion', result['method']['library'])
+
+    def test_phase_aliases_and_unrecognized_values(self):
+        raw = {'kind': 'lunation', 'iso_utc': '2026-11-09T07:02:08Z',
+               'local_time': '2026-11-09T14:02:08+07:00',
+               'sun': {'abs_pos': 227}, 'moon': {'abs_pos': 227}}
+        for canonical, alias in [('new', 'new_moon'), ('full', 'full_moon')]:
+            with self.subTest(phase=alias):
+                self.assertEqual(sky.normalize(dict(raw, phase=canonical)), sky.normalize(dict(raw, phase=alias)))
+        with self.assertRaisesRegex(ValueError, 'Unsupported lunar phase'):
+            sky.normalize(dict(raw, phase='unknown'))
 
     def test_private_cache_consent_and_clear(self):
         with tempfile.TemporaryDirectory() as d, patch.object(generate, 'ROOT', Path(d)):
